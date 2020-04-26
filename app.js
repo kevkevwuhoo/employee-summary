@@ -98,7 +98,9 @@ const internQuestions = [
 ];
 
 console.log("Answer the following questions to build your team.");
-inquirer.prompt(teamQuestion).then();
+inquirer.prompt(teamQuestion).then((response) => {
+    console.log(response);
+});
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
