@@ -1,0 +1,32 @@
+body {
+	background: lightblue;
+}
+
+.team-heading {
+	background: black;
+	color: white;
+}
+
+.employee-card {
+	margin: 10px;
+	min-width: 25%;
+}
+
+.card-header {
+	background: blue;
+}
+
+.card-title {
+	color: white;
+	text-align: center;
+}
+
+@media (max-width: 600px) {
+	.card-header {
+		background: red;
+	}
+
+	.employee-card {
+		height: auto;
+	}
+}
