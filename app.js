@@ -10,9 +10,7 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
-
+// inquirer questions to ask user for new employee
 const questions = [
 	{
 		type: "list",
@@ -124,6 +122,7 @@ const questions = [
 			return answers.teamMember === "Intern";
 		},
 	},
+	// ask user if they want to add another employee
 	{
 		type: "confirm",
 		name: "again",
@@ -138,7 +137,7 @@ async function promptUser(employeesInput = []) {
 		const { again, ...answers } = await inquirer.prompt(questions);
 		// newEmployee that takes in the employeesInput array called in the function and the answers from the prompt
 		const newEmployee = [...employeesInput, answers];
-		// if user wants to add more employees, call promptUser  function. if not, return newEmployee
+		// if user wants to add more employees, call promptUser function. if not, return newEmployee
 		return again ? promptUser(newEmployee) : newEmployee;
 	} catch (err) {
 		throw err;
@@ -165,49 +164,36 @@ async function init() {
 				school,
 			} = employee;
 
+			// if the new employee is a manager
+			// create new manager object and push it to employees array
 			if (teamMember === "Manager") {
-				// create new manager object and push it to employees array
-				const newManager = new Manager(name, id, email, officeNumber);
-				employees.push(newManager);
-			} else if (teamMember === "Engineer") {
-				// create new engineer object and push it to employees array
-				const newEngineer = new Engineer(name, id, email, github);
-				employees.push(newEngineer);
-			} else if (teamMember === "Intern") {
-				// create new intern object and push it to employees array
-				const newIntern = new Intern(name, id, email, school);
-				employees.push(newIntern);
+				const manager = new Manager(name, id, email, officeNumber);
+				employees.push(manager);
+			}
+			// if the employee is an engineer
+			// create new engineer object and push it to employees array
+			else if (teamMember === "Engineer") {
+				const engineer = new Engineer(name, id, email, github);
+				employees.push(engineer);
+			}
+			// if the employee is an intern
+			// create new intern object and push it to employees array
+			else if (teamMember === "Intern") {
+				const intern = new Intern(name, id, email, school);
+				employees.push(intern);
 			}
 		});
 
 		// render the employees, get html
 		const renderEmployee = render(employees);
 		// write to path "./output/team.html"
-		fs.writeFile(outputPath, renderEmployee, () => console.log("SUCCESS!"));
+		fs.writeFile(outputPath, renderEmployee, () =>
+			console.log("Your team has been assembled.")
+		);
 	} catch (err) {
 		throw new Error(err);
 	}
 }
 
+// start the app
 init();
-
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
-// render();
-
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
-
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work!```
